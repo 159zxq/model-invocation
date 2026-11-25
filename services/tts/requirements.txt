@@ -1,0 +1,5 @@
+-r ../common/requirements.txt
+
+huggingface-hub>=0.30,<1.0
+numpy==1.26.4
+soundfile==0.12.1

@@ -1,0 +1,51 @@
+hardware:
+  gpu: Tesla V100 32GB
+  compute_capability: sm70
+  dtype: float16
+  scheduling: one GPU inference process at a time
+
+vision:
+  purpose: full-body identity-preserving portrait generation
+  base_primary: SG161222/RealVisXL_V5.0
+  base_fallback: stabilityai/stable-diffusion-xl-base-1.0
+  identity: h94/IP-Adapter-FaceID
+  identity_weight: ip-adapter-faceid_sdxl.bin
+  structure: xinsir/controlnet-openpose-sdxl-1.0
+  face_embedding: InsightFace buffalo_l (CPU provider)
+
+speech:
+  purpose: zero-shot voice clone and expressive TTS
+  model: FunAudioLLM/Fun-CosyVoice3-0.5B-2512
+  runtime: AutoModel with fp16 and no ASR
+  sample_rate: 24000
+  controls:
+    - emotion
+    - speed
+    - pronunciation
+
+video:
+  purpose: audio-driven full-body video generation
+  model: BadToBest/EchoMimicV3 echomimicv3-flash-pro
+  base: alibaba-pai/Wan2.1-Fun-V1.1-1.3B-InP
+  audio_encoder: TencentGameMate/chinese-wav2vec2-base
+  dtype: float16
+  default_steps: 8
+  default_frames: 81
+  max_segments: 3
+  default_resolution: 768x768
+  vram_status: peak usage must be measured on the target V100
+
+personality:
+  purpose: dialogue, emotion, gesture and video prompt planning
+  provider: SiliconFlow
+  api: OpenAI-compatible chat completions
+  model: Qwen/Qwen3-8B
+  api_base: https://api.siliconflow.cn/v1
+
+runtime:
+  python: 3.10.12
+  torch: 2.5.1
+  torchvision: 0.20.1
+  torchaudio: 2.5.1
+  cuda_wheel: "12.1"
+  dtype: float16
